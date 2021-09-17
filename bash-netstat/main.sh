@@ -212,7 +212,6 @@ for item in ${flags_array[*]}; do
   unset OPTIND
   unset TMPOPTARG
   while getopts ":p:n:w:b:c:h:s:d:pnwbchsd" opt; do
-    #        echo "[$item] = $opt = $OPTARG"
     if [[ $opt == $item || ($opt == ':' && $OPTARG == $item) ]] && ! [[ $OPTARG =~ ^-[p/n/s/b/w/c/d/h]$ ]]; then
       if [[ $OPTARG && $opt != ':' ]]; then
         TESTED=3

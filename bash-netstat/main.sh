@@ -176,7 +176,7 @@ else
   exit 1
 fi
 ### Tools check [ (netstat | ss)!important | whois ]
-if [ -z "$(which netstat)" ] && [ -z "$(which ass)" ]; then
+if [ -z "$(which netstat)" ] && [ -z "$(which ss)" ]; then
   echo -e "Tools      | [FAIL] | ${RED}netstat and ss not installed${ENDCOLOR}"
   exit 1
 elif [ -z "$(which netstat)" ]; then

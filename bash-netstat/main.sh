@@ -6,9 +6,6 @@ set -o errexit
 set -o pipefail
 
 # Default values
-RED="\e[91m"
-GREEN="\e[32m"
-ENDCOLOR="\e[0m"
 ARGS=("$*")
 RED="\e[91m"
 GREEN="\e[92m"

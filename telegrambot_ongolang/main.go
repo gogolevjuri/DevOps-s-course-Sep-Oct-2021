@@ -1,5 +1,12 @@
 package main
 
+/*
+Написать функционирующего телеграмм бота на языке GO
+имеющего минимум 3 команды
+- Git возвращает адрес вашего репозитория
+- Tasks Возвращает нумерованный списов ваших выполенных заданий
+- Task# где # номер задания, возвращает ссылку на папку в вашем репозитории с выполенной задачей
+*/
 import (
 	"fmt"
 	"github.com/spf13/viper"
@@ -42,10 +49,12 @@ func main() {
 		return
 	}
 	b.Handle("/test", func(m *tb.Message) {
+
 		b.Send(m.Sender, "test")
 	})
 
 	b.Handle(tb.OnText, func(m *tb.Message) {
+		msgFunc(m.Text)
 		b.Send(m.Sender, "I  make help info from this, but not now")
 	})
 

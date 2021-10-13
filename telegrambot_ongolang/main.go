@@ -33,9 +33,11 @@ func main() {
 	var rgxpTasks = regexp.MustCompile(`^\/{0,1}tasks$`)
 	var rgxpTasksclose = regexp.MustCompile(`^.*tasks.*$`)
 	var rgxpTaskn = regexp.MustCompile(`^\/{0,1}task\s*\d{1,2}$`)
+	var rgxpTaskcc = regexp.MustCompile(`^\/{0,1}task#{0,1}$`)
 	var rgxpTasknclose = regexp.MustCompile(`^.*task.*$`)
 	var rgxpHelp = regexp.MustCompile(`^\/{0,1}help$`)
 	var rgxpHelpclose = regexp.MustCompile(`^.*\/{0,1}.*help.*$`)
+	var rgxpstart = regexp.MustCompile(`^\/start$`)
 	//vars end | other static params start
 	r, _ := regexp.Compile("[0-9]{1,2}")
 	//other static params end | viper load start
@@ -73,6 +75,10 @@ func main() {
 	})
 	//bot load end | main script start
 	b.Handle(tb.OnText, func(m *tb.Message) {
+		if !m.Private() {
+			msgFunc("error not private msg")
+			return
+		}
 		userMsglower := strings.ToLower(m.Text)
 		userMsg := strings.TrimSpace(userMsglower)
 		msgFunc(userMsg)
@@ -80,25 +86,39 @@ func main() {
 		case rgxpTasks.MatchString(userMsg):
 			b.Send(m.Sender, "ok u want see tasks")
 		case rgxpTasksclose.MatchString(userMsg):
-			b.Send(m.Sender, "ok it looks like tasks now but i'm not sure")
+			b.Send(m.Sender, "I'm find \"tasks\" in your msg, if you want check list of tasks, write /tasks\n"+
+				"Full list of comands u can get using /help")
 		case rgxpTaskn.MatchString(userMsg):
-			b.Send(m.Sender, "ok task with number")
 			tasknum := r.FindString(userMsg)
 			b.Send(m.Sender, "ok task with number ("+tasknum+")")
+		case rgxpTaskcc.MatchString(userMsg):
+			b.Send(m.Sender, "U forget specify the number. Example /task1 .")
 		case rgxpTasknclose.MatchString(userMsg):
-			b.Send(m.Sender, "ok just task")
+			b.Send(m.Sender, "I'm find \"task\" in your msg, if you want check tasks write /task# where # is nubmer of the task, example /task1\n"+
+				"If u want check full list of tasks, write /tasks"+
+				"Full list of comands u can get using /help")
 		case rgxpGit.MatchString(userMsg):
 			b.Send(m.Sender, "github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021")
-		case rgxpGit.MatchString(userMsg):
-			b.Send(m.Sender, "github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021")
-		case rgxpHelp.MatchString(userMsg):
-			b.Send(m.Sender, "its help \n sss")
-		case rgxpHelpclose.MatchString(userMsg):
-			b.Send(m.Sender, "If u searching help, write /help")
 		case rgxpGitclose.MatchString(userMsg):
 			b.Send(m.Sender, "I'm find \"git\" in your msg, if you want check my git wirte /git\nFull list of comands u can get using /help")
+		case rgxpHelp.MatchString(userMsg):
+			b.Send(m.Sender, "Hey, there list of comands, hope u find what you've been looking for\n"+
+				"/help - help comand, u are here now\n"+
+				"/git - show git repository\n"+
+				"/tasks - show list of all tasks\n"+
+				"/task# - return info about selected task; where # is nubmer of the task, example /task1\n\n"+
+				"created by Juri Gogolev")
+		case rgxpHelpclose.MatchString(userMsg):
+			b.Send(m.Sender, "If u searching help, write /help")
+		case rgxpstart.MatchString(userMsg):
+			b.Send(m.Sender, "Hi, u probably new here...this is comands what i accept\n"+
+				"/help - help comand\n"+
+				"/git - show git repository\n"+
+				"/tasks - show list of all tasks\n"+
+				"/task# - return info about selected task; where # is nubmer of the task, example /task1\n\n",
+			)
 		default:
-			b.Send(m.Sender, "I  make help info from this, but not now")
+			b.Send(m.Sender, "Please use comands from /help.")
 		}
 	})
 	//main script end

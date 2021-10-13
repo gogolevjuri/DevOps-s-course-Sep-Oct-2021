@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+    conf := viper.New()
+
 	b, err := tb.NewBot(tb.Settings{
 		Token: "https://pkg.go.dev/gopkg.in/tucnak/telebot.v2",
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},

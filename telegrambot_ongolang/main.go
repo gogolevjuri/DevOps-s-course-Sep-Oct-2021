@@ -41,7 +41,7 @@ func main() {
 	}
 	APITOKEN := configdata.APITOKEN
 	//APITOKEN := strings.ToLower("sss")
-	teststring := " Tasks"
+	teststring := " Tasks asd"
 	match, _ := regexp.MatchString("tasks", strings.ToLower(teststring))
 	fmt.Println(match)
 	msgFunc("Starting bot")

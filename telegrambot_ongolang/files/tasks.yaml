@@ -1,0 +1,6 @@
+tasks:
+  t1:
+    name:"testname"
+    descr:"testdescr"
+    state:"teststate"
+    link:"testlink"

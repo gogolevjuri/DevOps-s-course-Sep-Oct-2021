@@ -37,7 +37,7 @@ func main() {
 	var rgxpTasknclose = regexp.MustCompile(`^.*task.*$`)
 	var rgxpHelp = regexp.MustCompile(`^\/{0,1}help$`)
 	var rgxpHelpclose = regexp.MustCompile(`^.*\/{0,1}.*help.*$`)
-	var rgxpstart = regexp.MustCompile(`^\/start$`)
+	var rgxpStart = regexp.MustCompile(`^\/{1}start$`)
 	//vars end | other static params start
 	r, _ := regexp.Compile("[0-9]{1,2}")
 	//other static params end | viper load start
@@ -45,9 +45,13 @@ func main() {
 	conf.SetConfigName("conf")  // name of config file (without extension)
 	conf.SetConfigType("yaml")  // REQUIRED if the config file does not have the extension in the name
 	conf.AddConfigPath("files") // path to look for the config file in
-	conf.AddConfigPath(".")     // optionally look for config in the working directory
-	err := conf.ReadInConfig()  // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
+	conf.MergeInConfig()
+	conf.SetConfigName("tasks") // name of config file (without extension)
+	conf.SetConfigType("yaml")  // REQUIRED if the config file does not have the extension in the name
+	conf.AddConfigPath("files") // path to look for the config file in
+	conf.MergeInConfig()
+	err := conf.ReadInConfig() // Find and read the config file
+	if err != nil {            // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error files/conf.yaml file: %w \n", err))
 	}
 	err = conf.Unmarshal(&configdata)
@@ -110,7 +114,7 @@ func main() {
 				"created by Juri Gogolev")
 		case rgxpHelpclose.MatchString(userMsg):
 			b.Send(m.Sender, "If u searching help, write /help")
-		case rgxpstart.MatchString(userMsg):
+		case rgxpStart.MatchString(userMsg):
 			b.Send(m.Sender, "Hi, u probably new here...this is comands what i accept\n"+
 				"/help - help comand\n"+
 				"/git - show git repository\n"+

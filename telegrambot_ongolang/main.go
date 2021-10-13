@@ -3,7 +3,7 @@ package main
 /*
 Написать функционирующего телеграмм бота на языке GO
 имеющего минимум 3 команды
-- Git возвращает адрес вашего репозитория
+- Git возвращает адрес вашего репозитория /git
 - Tasks Возвращает нумерованный списов ваших выполенных заданий
 - Task# где # номер задания, возвращает ссылку на папку в вашем репозитории с выполенной задачей
 */
@@ -29,9 +29,11 @@ func main() {
 	//vars
 	var configdata Data
 	var rgxpGit = regexp.MustCompile(`^\/{0,1}git$`)
-	var rgxpGitclose = regexp.MustCompile(`^.*\/{0,1}.*git.*$`)
+	var rgxpGitclose = regexp.MustCompile(`^.*git.*$`)
 	var rgxpTasks = regexp.MustCompile(`^\/{0,1}tasks$`)
-	var rgxpTasksclose = regexp.MustCompile(`^.*\/{0,1}.*tasks.*$`)
+	var rgxpTasksclose = regexp.MustCompile(`^.*tasks.*$`)
+	var rgxpTaskn = regexp.MustCompile(`^\/{0,1}task\s*\d{1,2}$`)
+	var rgxpTasknclose = regexp.MustCompile(`^.*task.*$`)
 	var rgxpHelp = regexp.MustCompile(`^\/{0,1}help$`)
 	var rgxpHelpclose = regexp.MustCompile(`^.*\/{0,1}.*help.*$`)
 	//var twoPointTwo = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9]$`)
@@ -78,17 +80,20 @@ func main() {
 			b.Send(m.Sender, "ok u want see tasks")
 		case rgxpTasksclose.MatchString(userMsg):
 			b.Send(m.Sender, "ok it looks like tasks now but i'm not sure")
+		case rgxpTaskn.MatchString(userMsg):
+			b.Send(m.Sender, "ok task with number")
+		case rgxpTasknclose.MatchString(userMsg):
+			b.Send(m.Sender, "ok just task")
 		case rgxpGit.MatchString(userMsg):
 			b.Send(m.Sender, "github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021")
 		case rgxpGit.MatchString(userMsg):
 			b.Send(m.Sender, "github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021")
 		case rgxpHelp.MatchString(userMsg):
-			b.Send(m.Sender, "its help")
+			b.Send(m.Sender, "its help \n sss")
 		case rgxpHelpclose.MatchString(userMsg):
-			b.Send(m.Sender, "its help close")
+			b.Send(m.Sender, "If u searching help, write /help")
 		case rgxpGitclose.MatchString(userMsg):
-			b.Send(m.Sender, "I'm find \"git\" in your msg, if you want check my git wirte /git")
-			b.Send(m.Sender, "Full list of comands u can get using /help")
+			b.Send(m.Sender, "I'm find \"git\" in your msg, if you want check my git wirte /git\nFull list of comands u can get using /help")
 		default:
 			b.Send(m.Sender, "I  make help info from this, but not now")
 		}

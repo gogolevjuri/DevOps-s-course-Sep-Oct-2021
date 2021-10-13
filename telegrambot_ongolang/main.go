@@ -21,7 +21,8 @@ type Data struct {
 }
 
 func msgFunc(lnmsg string) {
-	fmt.Println(time.Now(), lnmsg)
+	currentTime := time.Now()
+	fmt.Println(currentTime.Format("2006-01-02 15:04:05"), "|", lnmsg)
 }
 
 func main() {
@@ -31,7 +32,7 @@ func main() {
 	var rgxpGitclose = regexp.MustCompile(`^.*\/{0,1}.*git.*$`)
 	var rgxpTasks = regexp.MustCompile(`^\/{0,1}tasks$`)
 	var rgxpTasksclose = regexp.MustCompile(`^.*\/{0,1}.*tasks.*$`)
-	var twoPointTwo = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9]$`)
+	//var twoPointTwo = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9]$`)
 	//viper load start
 	conf := viper.New()
 	conf.SetConfigName("conf")  // name of config file (without extension)
@@ -48,10 +49,7 @@ func main() {
 	}
 	//viper end load | bot load start
 	APITOKEN := configdata.APITOKEN
-	//APITOKEN := strings.ToLower("sss")
-	teststring := " Tasks asd"
-	match, _ := regexp.MatchString("tasks", strings.ToLower(teststring))
-	fmt.Println(match)
+
 	msgFunc("Starting bot")
 	b, err := tb.NewBot(tb.Settings{
 		Token:  APITOKEN,
@@ -74,16 +72,15 @@ func main() {
 		userMsg := strings.TrimSpace(userMsglower)
 		msgFunc(userMsg)
 		switch {
-		case rgxpGit.MatchString(userMsg):
-			b.Send(m.Sender, "ok u write git now")
-		case rgxpGitclose.MatchString(userMsg):
-			b.Send(m.Sender, "ok it looks like  git now but i'm not sure")
 		case rgxpTasks.MatchString(userMsg):
 			b.Send(m.Sender, "ok u want see tasks")
 		case rgxpTasksclose.MatchString(userMsg):
 			b.Send(m.Sender, "ok it looks like tasks now but i'm not sure")
-		case twoPointTwo.MatchString(userMsg):
-			fmt.Println("2.2")
+		case rgxpGit.MatchString(userMsg):
+			b.Send(m.Sender, "ok u write git now")
+		case rgxpGitclose.MatchString(userMsg):
+			b.Send(m.Sender, "ok it looks like  git now but i'm not sure")
+
 		default:
 			b.Send(m.Sender, "I  make help info from this, but not now")
 		}

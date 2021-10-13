@@ -23,6 +23,7 @@ type Data struct {
 func msgFunc(lnmsg string) {
 	fmt.Println(time.Now(), lnmsg)
 }
+
 func main() {
 	var configdata Data
 
@@ -63,6 +64,16 @@ func main() {
 
 	b.Handle(tb.OnText, func(m *tb.Message) {
 		msgFunc(m.Text)
+		switch usermsg := m.Text; usermsg {
+		case "darwin":
+			fmt.Println("OS X.")
+		case "linux":
+			fmt.Println("Linux.")
+		default:
+			// freebsd, openbsd,
+			// plan9, windows...
+			fmt.Printf("%s.\n", os)
+		}
 		b.Send(m.Sender, "I  make help info from this, but not now")
 	})
 

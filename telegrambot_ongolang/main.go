@@ -72,7 +72,7 @@ func main() {
 		default:
 			// freebsd, openbsd,
 			// plan9, windows...
-			fmt.Printf("%s.\n", os)
+			fmt.Printf("unknow")
 		}
 		b.Send(m.Sender, "I  make help info from this, but not now")
 	})

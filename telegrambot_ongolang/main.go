@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	tb "gopkg.in/tucnak/telebot.v2"
+	"regexp"
 	"time"
 )
 
@@ -38,6 +39,8 @@ func main() {
 		fmt.Printf("Unable to decode into struct, %v", err)
 	}
 	APITOKEN := configdata.APITOKEN
+	match, _ := regexp.MatchString("p([a-z]+)ch", "peach")
+	fmt.Println(match)
 	msgFunc("Starting bot")
 	b, err := tb.NewBot(tb.Settings{
 		Token:  APITOKEN,

@@ -25,8 +25,11 @@ func msgFunc(lnmsg string) {
 }
 
 func main() {
+	//vars
 	var configdata Data
-
+	var rgxpGit = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9][0-9][0-9]$`)
+	var twoPointTwo = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9]$`)
+	//viper load start
 	conf := viper.New()
 	conf.SetConfigName("conf")  // name of config file (without extension)
 	conf.SetConfigType("yaml")  // REQUIRED if the config file does not have the extension in the name
@@ -40,6 +43,7 @@ func main() {
 	if err != nil {
 		fmt.Printf("Unable to decode into struct, %v", err)
 	}
+	//viper end load | bot load start
 	APITOKEN := configdata.APITOKEN
 	//APITOKEN := strings.ToLower("sss")
 	teststring := " Tasks asd"
@@ -61,21 +65,21 @@ func main() {
 
 		b.Send(m.Sender, "test")
 	})
-
+	//bot load end | main script start
 	b.Handle(tb.OnText, func(m *tb.Message) {
-		msgFunc(m.Text)
-		switch usermsg := m.Text; usermsg {
-		case "darwin":
-			fmt.Println("OS X.")
-		case "linux":
-			fmt.Println("Linux.")
+		userMsglower := strings.ToLower(m.Text)
+		userMsg := strings.TrimSpace(userMsglower)
+		msgFunc(userMsg)
+		switch {
+		case rgxpGit.MatchString(userMsg):
+			fmt.Println("2.4")
+		case twoPointTwo.MatchString(userMsg):
+			fmt.Println("2.2")
 		default:
-			// freebsd, openbsd,
-			// plan9, windows...
-			fmt.Printf("unknow")
+			fmt.Println("It doesn't match")
 		}
 		b.Send(m.Sender, "I  make help info from this, but not now")
 	})
-
+	//main script end
 	b.Start()
 }

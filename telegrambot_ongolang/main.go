@@ -11,6 +11,9 @@ type Data struct {
 	APITOKEN string
 }
 
+func msgFunc(lnmsg string) {
+	fmt.Println(time.Now(), lnmsg)
+}
 func main() {
 	var configdata Data
 
@@ -28,19 +31,18 @@ func main() {
 		fmt.Printf("Unable to decode into struct, %v", err)
 	}
 	APITOKEN := configdata.APITOKEN
-	fmt.Printf("test", APITOKEN)
-
+	msgFunc("Starting bot")
 	b, err := tb.NewBot(tb.Settings{
 		Token:  APITOKEN,
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 	})
-
+	msgFunc("Bot started")
 	if err != nil {
 		return
 	}
 
 	b.Handle(tb.OnText, func(m *tb.Message) {
-		b.Send(m.Sender, "hello world")
+		b.Send(m.Sender, "hello worldqqq")
 	})
 
 	b.Start()

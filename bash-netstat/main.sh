@@ -348,7 +348,10 @@ while IFS=', ' read -r str; do
   IP=$(echo $str | awk '{print $2}')
   COUNTER=$(echo $str | awk '{print $1}')
   if [ $UTILWHOIS ]; then
-    ORG_NAME=$(whois $IP | grep -m 1 $WHOISF)
+    ORG_NAME=$(whois $IP | awk -F':' '/'"$WHOISF"/' {print $2}')
+    if [ -z "${ORG_NAME}" ]; then
+      ORG_NAME='   Unknown'
+    fi
     echo -e "$IP\t|\t$COUNTER\t| $ORG_NAME"
   else
     echo -e "$IP\t|\t$COUNTER"

@@ -26,7 +26,7 @@ func msgFunc(lnmsg string) {
 }
 
 func main() {
-	//vars
+	//vars start
 	var configdata Data
 	var rgxpGit = regexp.MustCompile(`^\/{0,1}git$`)
 	var rgxpGitclose = regexp.MustCompile(`^.*git.*$`)
@@ -36,8 +36,9 @@ func main() {
 	var rgxpTasknclose = regexp.MustCompile(`^.*task.*$`)
 	var rgxpHelp = regexp.MustCompile(`^\/{0,1}help$`)
 	var rgxpHelpclose = regexp.MustCompile(`^.*\/{0,1}.*help.*$`)
-	//var twoPointTwo = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9]$`)
-	//viper load start
+	//vars end | other static params start
+	r, _ := regexp.Compile("[0-9]{1,2}")
+	//other static params end | viper load start
 	conf := viper.New()
 	conf.SetConfigName("conf")  // name of config file (without extension)
 	conf.SetConfigType("yaml")  // REQUIRED if the config file does not have the extension in the name
@@ -82,6 +83,8 @@ func main() {
 			b.Send(m.Sender, "ok it looks like tasks now but i'm not sure")
 		case rgxpTaskn.MatchString(userMsg):
 			b.Send(m.Sender, "ok task with number")
+			tasknum := r.FindString(userMsg)
+			b.Send(m.Sender, "ok task with number ("+tasknum+")")
 		case rgxpTasknclose.MatchString(userMsg):
 			b.Send(m.Sender, "ok just task")
 		case rgxpGit.MatchString(userMsg):

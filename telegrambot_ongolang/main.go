@@ -27,7 +27,10 @@ func msgFunc(lnmsg string) {
 func main() {
 	//vars
 	var configdata Data
-	var rgxpGit = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9][0-9][0-9]$`)
+	var rgxpGit = regexp.MustCompile(`^\/{0,1}git$`)
+	var rgxpGitclose = regexp.MustCompile(`^.*\/{0,1}.*git.*$`)
+	var rgxpTasks = regexp.MustCompile(`^\/{0,1}tasks$`)
+	var rgxpTasksclose = regexp.MustCompile(`^.*\/{0,1}.*tasks.*$`)
 	var twoPointTwo = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9]$`)
 	//viper load start
 	conf := viper.New()
@@ -72,13 +75,18 @@ func main() {
 		msgFunc(userMsg)
 		switch {
 		case rgxpGit.MatchString(userMsg):
-			fmt.Println("2.4")
+			b.Send(m.Sender, "ok u write git now")
+		case rgxpGitclose.MatchString(userMsg):
+			b.Send(m.Sender, "ok it looks like  git now but i'm not sure")
+		case rgxpTasks.MatchString(userMsg):
+			b.Send(m.Sender, "ok u want see tasks")
+		case rgxpTasksclose.MatchString(userMsg):
+			b.Send(m.Sender, "ok it looks like tasks now but i'm not sure")
 		case twoPointTwo.MatchString(userMsg):
 			fmt.Println("2.2")
 		default:
-			fmt.Println("It doesn't match")
+			b.Send(m.Sender, "I  make help info from this, but not now")
 		}
-		b.Send(m.Sender, "I  make help info from this, but not now")
 	})
 	//main script end
 	b.Start()

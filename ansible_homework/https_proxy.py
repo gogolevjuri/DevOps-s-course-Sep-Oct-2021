@@ -43,4 +43,4 @@ def make_request(url, method, headers={}, data=None, json_inf={}):
     return requests.request(method, url, params=request.args, stream=True, headers=headers, allow_redirects=False, data=data_inf)
 
 if __name__ == "__main__":
-    app.run(debug=True,port=443,ssl_context=('cert.pem', 'key.pem'))
+    app.run(debug=True,port=443,ssl_context=('./ssl/cert.crt', './ssl/private.pem'))

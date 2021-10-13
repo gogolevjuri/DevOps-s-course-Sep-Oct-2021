@@ -38,11 +38,15 @@ func main() {
 	})
 	msgFunc("Bot started")
 	if err != nil {
+		msgFunc("Bot starting error")
 		return
 	}
+	b.Handle("/test", func(m *tb.Message) {
+		b.Send(m.Sender, "test")
+	})
 
 	b.Handle(tb.OnText, func(m *tb.Message) {
-		b.Send(m.Sender, "hello worldqqq")
+		b.Send(m.Sender, "I  make help info from this, but not now")
 	})
 
 	b.Start()

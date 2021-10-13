@@ -32,6 +32,8 @@ func main() {
 	var rgxpGitclose = regexp.MustCompile(`^.*\/{0,1}.*git.*$`)
 	var rgxpTasks = regexp.MustCompile(`^\/{0,1}tasks$`)
 	var rgxpTasksclose = regexp.MustCompile(`^.*\/{0,1}.*tasks.*$`)
+	var rgxpHelp = regexp.MustCompile(`^\/{0,1}help$`)
+	var rgxpHelpclose = regexp.MustCompile(`^.*\/{0,1}.*help.*$`)
 	//var twoPointTwo = regexp.MustCompile(`^[0-9][0-9]\.[0-9][0-9]$`)
 	//viper load start
 	conf := viper.New()
@@ -77,10 +79,16 @@ func main() {
 		case rgxpTasksclose.MatchString(userMsg):
 			b.Send(m.Sender, "ok it looks like tasks now but i'm not sure")
 		case rgxpGit.MatchString(userMsg):
-			b.Send(m.Sender, "ok u write git now")
+			b.Send(m.Sender, "github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021")
+		case rgxpGit.MatchString(userMsg):
+			b.Send(m.Sender, "github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021")
+		case rgxpHelp.MatchString(userMsg):
+			b.Send(m.Sender, "its help")
+		case rgxpHelpclose.MatchString(userMsg):
+			b.Send(m.Sender, "its help close")
 		case rgxpGitclose.MatchString(userMsg):
-			b.Send(m.Sender, "ok it looks like  git now but i'm not sure")
-
+			b.Send(m.Sender, "I'm find \"git\" in your msg, if you want check my git wirte /git")
+			b.Send(m.Sender, "Full list of comands u can get using /help")
 		default:
 			b.Send(m.Sender, "I  make help info from this, but not now")
 		}

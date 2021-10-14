@@ -1,7 +1,25 @@
 tasks:
   t1:
     id: "1"
-    name: "task #1 (greate git)"
-    addinfo: "test"
-    state: "FAIL"
-    link: "localhost"
+    name: "Create git with TIL,about_me,etc.."
+    addinfo: ""
+    state: "done"
+    link: "https://github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021"
+  t2:
+    id: "2"
+    name: "make bash script + ansible"
+    addinfo: "done but not uploaded last patch yet"
+    state: "need update"
+    link: "https://github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021/tree/master/ansible_homework"
+  t3:
+    id: "3"
+    name: "netstat scrypt"
+    addinfo: ""
+    state: "done"
+    link: "https://github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021/tree/master/bash-netstat"
+  t4:
+    id: "4"
+    name: "telegram bot on GoLang"
+    addinfo: "u are here now )"
+    state: "done"
+    link: "https://github.com/gogolevjuri/DevOps-s-course-Sep-Oct-2021/tree/master/telegrambot_ongolang"

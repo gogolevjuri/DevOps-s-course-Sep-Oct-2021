@@ -42,21 +42,22 @@ func main() {
 	r, _ := regexp.Compile("[0-9]{1,2}")
 	//other static params end | viper load start
 	conf := viper.New()
-	conf.SetConfigName("conf")  // name of config file (without extension)
-	conf.SetConfigType("yaml")  // REQUIRED if the config file does not have the extension in the name
-	conf.AddConfigPath("files") // path to look for the config file in
-	conf.MergeInConfig()
-	conf.SetConfigName("tasks") // name of config file (without extension)
-	conf.SetConfigType("yaml")  // REQUIRED if the config file does not have the extension in the name
-	conf.AddConfigPath("files") // path to look for the config file in
-	conf.MergeInConfig()
-	err := conf.ReadInConfig() // Find and read the config file
-	if err != nil {            // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error files/conf.yaml file: %w \n", err))
+	tasklist := viper.New()
+	conf.SetConfigName("conf")      // name of config file (without extension)
+	conf.SetConfigType("yaml")      // REQUIRED if the config file does not have the extension in the name
+	conf.AddConfigPath("files")     // path to look for the config file in
+	tasklist.SetConfigName("tasks") // name of config file (without extension)
+	tasklist.SetConfigType("yaml")  // REQUIRED if the config file does not have the extension in the name
+	tasklist.AddConfigPath("files") // path to look for the config file in
+	tasklist.AutomaticEnv()
+	errc := conf.ReadInConfig()     // Find and read the config file
+	errt := tasklist.ReadInConfig() // Find and read the config file
+	if errc != nil || errt != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error files/conf.yaml file: %w \n", errc))
 	}
-	err = conf.Unmarshal(&configdata)
-	if err != nil {
-		fmt.Printf("Unable to decode into struct, %v", err)
+	errc = conf.Unmarshal(&configdata)
+	if errc != nil {
+		fmt.Printf("Unable to decode into struct, %v", errc)
 	}
 	//viper end load | bot load start
 	APITOKEN := configdata.APITOKEN
@@ -94,7 +95,19 @@ func main() {
 				"Full list of comands u can get using /help")
 		case rgxpTaskn.MatchString(userMsg):
 			tasknum := r.FindString(userMsg)
-			b.Send(m.Sender, "ok task with number ("+tasknum+")")
+			task := tasklist.GetStringMapString(fmt.Sprintf("tasks.t%s", tasknum))
+			if len(task["name"]) > 0 {
+				b.Send(m.Sender, "Task №"+tasknum+"\n"+
+					"_______________________\n"+
+					"name : "+task["name"]+"\n"+
+					"state : "+task["state"]+"\n"+
+					"info : "+task["addinfo"]+"\n"+
+					"link : "+task["link"]+"\n"+
+					"_______________________\n"+
+					"list all tasks /tasks")
+			} else {
+				b.Send(m.Sender, "Cant find task with number ("+tasknum+"), use /tasks to list all tasks.")
+			}
 		case rgxpTaskcc.MatchString(userMsg):
 			b.Send(m.Sender, "U forget specify the number. Example /task1 .")
 		case rgxpTasknclose.MatchString(userMsg):

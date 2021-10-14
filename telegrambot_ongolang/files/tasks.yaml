@@ -1,6 +1,6 @@
 tasks:
   t1:
-    name:"testname"
-    descr:"testdescr"
-    state:"teststate"
-    link:"testlink"
+    name: "task #1 (greate git)"
+    addinfo: "test"
+    state: "FAIL"
+    link: "localhost"

@@ -89,7 +89,17 @@ func main() {
 		msgFunc(userMsg)
 		switch {
 		case rgxpTasks.MatchString(userMsg):
-			b.Send(m.Sender, "ok u want see tasks")
+			tmpmsg := "Showing all tasks\n" +
+				"_______________________\n"
+			countOfTasks := len(tasklist.GetStringMapStringSlice("tasks"))
+			for i := 1; i <= countOfTasks; i++ {
+				taskitem := tasklist.GetStringMapString(fmt.Sprintf("tasks.t%d", i))
+				tmpmsg += "task id : " + taskitem["id"] + "\n" +
+					"task name : " + taskitem["name"] + "\n" +
+					"more info in /task" + taskitem["id"] + "\n" +
+					"_______________________\n"
+			}
+			b.Send(m.Sender, tmpmsg)
 		case rgxpTasksclose.MatchString(userMsg):
 			b.Send(m.Sender, "I'm find \"tasks\" in your msg, if you want check list of tasks, write /tasks\n"+
 				"Full list of comands u can get using /help")

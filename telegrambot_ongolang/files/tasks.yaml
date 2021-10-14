@@ -1,5 +1,6 @@
 tasks:
   t1:
+    id: "1"
     name: "task #1 (greate git)"
     addinfo: "test"
     state: "FAIL"

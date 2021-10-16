@@ -68,25 +68,17 @@ else
   exit 1
 fi
 ### Tools check [ (netstat | ss)!important | whois ]
-if [ -z "$(which netstat)" ] && [ -z "$(which ss)" ]; then
-  echo -e "Tools      | [FAIL] | ${RED}netstat and ss not installed${ENDCOLOR}"
+if [ -z "$(which curl)" ]; then
+  echo -e "Curl       | [FAIL] | ${RED}curl not installed${ENDCOLOR}"
   exit 1
-elif [ -z "$(which netstat)" ]; then
-  echo -e "Tools      |  [OK]  | ${GREEN}ss${ENDCOLOR}"
-  UTILSS=1
-elif [ -z "$(which ss)" ]; then
-  echo -e "Tools      |  [OK]  | ${GREEN}netstat${ENDCOLOR}"
-  UTILNETSTAT=1
 else
-  echo -e "Tools      |  [OK]  | ${GREEN}netstat${ENDCOLOR} & ${GREEN}ss${ENDCOLOR}"
-  UTILSS=1
-  UTILNETSTAT=1
+  echo -e "Curl       |  [OK]  | ${GREEN}Curl${ENDCOLOR}"
 fi
-if [ -z "$(which whois)" ]; then
-  echo -e "Whois      | [FAIL] | ${RED}not installed ${ENDCOLOR}"
+if [ -z "$(which jq)" ]; then
+  echo -e "jq         | [FAIL] | ${RED}jq   installed${ENDCOLOR}"
+  exit 1
 else
-  echo -e "Whois      |  [OK]  | ${GREEN}installed${ENDCOLOR}"
-  UTILWHOIS=1
+  echo -e "jq         |  [OK]  | ${GREEN}jq  ${ENDCOLOR}"
 fi
 
 #### checking flags of script
@@ -137,40 +129,64 @@ for item in ${flags_array[*]}; do
 done
 #### Main code...
 ## I'm a litle tired now
-MAINCOMMAND="$($(echo $USEDUTIL -tunap))"
-if [ -z "${CONTYPE2}" ]; then
-  CONTYPE2=$CONTYPE
-fi
-if [ $USEDUTIL == 'netstat' ]; then
-  IPLIST="$(echo "$MAINCOMMAND" | grep -e $CONTYPE -e $CONTYPE2 | awk '/'"$PROCESS"/' {print $5}' | cut -d: -f1)"
+USERNAME=$(echo "$URL" | awk -F'/' '{print $4}')
+REPNAME=$(echo "$URL" | awk -F'/' '{print $5}')
+echo -e "========================================================================"
+echo -e "User         | ${GREEN}$USERNAME${ENDCOLOR}"
+echo -e "Repository   | ${GREEN}$REPNAME${ENDCOLOR}"
+
+CURLREQUEST=$(curl -s "https://api.github.com/repos/"$USERNAME"/"$REPNAME"/pulls?per_page=1000&state=open")
+
+ULOGIN=$(echo "$CURLREQUEST" | jq '.[].user.login')
+#if [ -z "$(which curl)" ]; then
+ #  echo -e "Curl       | [FAIL] | ${RED}curl not installed${ENDCOLOR}"
+ #  exit 1
+ #else
+ #  echo -e "Curl       |  [OK]  | ${GREEN}Curl${ENDCOLOR}"
+ #fi
+
+
+echo -e "========================================================================"
+if [ -z "$ULOGIN" ]; then
+   echo -e "Open PR    | [FAIL] | ${RED}No open PR here${ENDCOLOR}"
+  exit 4
 else
-  IPLIST="$(echo "$MAINCOMMAND" | grep -e $CONTYPE -e $CONTYPE2 | awk '/'"$PROCESS"/' {print $6}' | cut -d: -f1)"
-fi
-if [ -z "${IPLIST}" ]; then
-  echo "Cant find any connections on $PROCESS process."
-  exit 1
+  echo "Answer: There are open PR"
+   echo -e "Open PR    |  [OK]  | ${GREEN}Finded some PR's${ENDCOLOR}"
 fi
 echo -e "========================================================================"
-if [ $UTILWHOIS ]; then
-  echo -e "     IP\t\t|      Count""\t| Whois filter"
-  echo -e "========================================================================"
-else
-  echo -e "     IP\t\t|      Count"
-  echo -e "========================================================================"
-fi
-NETUTILRESULT="$(echo "$IPLIST" | cut -d: -f1 | sort | uniq -c | sort | tail -n$LIMIT)"
-while IFS=', ' read -r str; do
-  IP=$(echo $str | awk '{print $2}')
-  COUNTER=$(echo $str | awk '{print $1}')
-  if [ $UTILWHOIS ]; then
-    ORG_NAME=$(whois $IP | awk -F':' '/'"$WHOISF"/' {print $2}')
-    if [ -z "${ORG_NAME}" ]; then
-      ORG_NAME='   Unknown'
-    fi
-    echo -e "$IP\t|\t$COUNTER\t| $ORG_NAME"
-  else
-    echo -e "$IP\t|\t$COUNTER"
-  fi
-done <<<"$NETUTILRESULT"
-exit 1
 
+NAMELIST=$(echo "$ULOGIN" | sort | uniq -c | awk '{if ($1>1) print $1, $2}')
+echo "TOP of contributors (authors with 1+ open PR)
+"
+echo "Number| Name"
+echo "$NAMELIST"
+
+LABELLIST=$(echo "$CURLREQUEST" | jq '.[].labels[0].name')
+AICOUNTER=0
+AIICOUNTER=0
+
+while IFS=', ' read -r str; do
+  CSTR=$(echo $str | awk '{print $1}')
+  LOGINARR[$AICOUNTER]=$CSTR
+  AICOUNTER=$(($AICOUNTER + 1))
+done <<<"$ULOGIN"
+echo -e "========================================================================"
+echo -e "     Name\t\t\t|      Label"
+echo -e "========================================================================"
+while IFS=', ' read -r str; do
+  CSTR=$(echo $str | awk '{print $1}')
+  if [[ $CSTR != 'null' ]]; then
+    TMPL=${LOGINARR[$AIICOUNTER]}
+    LENCOUNT=${#TMPL}
+    if [[ $LENCOUNT < 13 ]]; then
+      ADDTAB="\t"
+    else
+      ADDTAB=""
+    fi
+    echo -e "     $TMPL\t\t$ADDTAB|      $CSTR"
+  fi
+  AIICOUNTER=$(($AIICOUNTER + 1))
+done <<<"$LABELLIST"
+echo -e "========================================================================"
+exit 1

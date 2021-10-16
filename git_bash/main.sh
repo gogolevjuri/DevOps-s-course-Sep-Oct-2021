@@ -136,15 +136,7 @@ echo -e "User         | ${GREEN}$USERNAME${ENDCOLOR}"
 echo -e "Repository   | ${GREEN}$REPNAME${ENDCOLOR}"
 
 CURLREQUEST=$(curl -s "https://api.github.com/repos/"$USERNAME"/"$REPNAME"/pulls?per_page=1000&state=open")
-
 ULOGIN=$(echo "$CURLREQUEST" | jq '.[].user.login')
-#if [ -z "$(which curl)" ]; then
- #  echo -e "Curl       | [FAIL] | ${RED}curl not installed${ENDCOLOR}"
- #  exit 1
- #else
- #  echo -e "Curl       |  [OK]  | ${GREEN}Curl${ENDCOLOR}"
- #fi
-
 
 echo -e "========================================================================"
 if [ -z "$ULOGIN" ]; then

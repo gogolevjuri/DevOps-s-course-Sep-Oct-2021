@@ -56,6 +56,8 @@ This task consists of:
 ***
 My app work ( animal_app.py ) created with Flask and emoji support. The service listens at least on port 80 and accepts GET and POST methods.
 Also I created second app ( https_proxy.py ) what listens at port 443, with self signed cert ( u need create `ssl` dir, and place here private.pem && cert.crt )
+> Ssl certs not provided in repository for security reasons, u know...
+
 > Starting this both apps allows u to use 443(ssl) and 80 port in same time [Sudo recomended.]
 
 > curl -XPOST -d'{"animal":"cow", "sound":"moooo", "count": 3}' http://myvm.localhost/

@@ -26,9 +26,7 @@ helpmessage() {
   echo ""
   echo "examples"
   echo ""
-  echo -e "sudo ./$(basename "${BASH_SOURCE[0]}") -p chrome -c 5 -b n -n a -w Organization "
-  echo -e "sudo ./$(basename "${BASH_SOURCE[0]}") -p chrome -s "
-  echo -e "sudo ./$(basename "${BASH_SOURCE[0]}") -p chrome "
+  echo -e "sudo ./$(basename "${BASH_SOURCE[0]}") -p https://github.com/rubenlagus/TelegramBots "
   echo "TNX | P.S> Created by Juri Gogolev"
   exit 0
 }

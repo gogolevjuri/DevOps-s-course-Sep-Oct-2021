@@ -3,7 +3,7 @@
 ##Task
 ![image](https://r.elite.ovh/dev/s1.jpg)
 ***
-All parts of task done ... I hope
+All parts of task done ... I hope :D
 ***
 ```
 Options:

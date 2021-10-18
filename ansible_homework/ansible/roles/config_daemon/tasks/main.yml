@@ -1,0 +1,20 @@
+---
+# tasks file for config_daemon
+- name: App daemon config
+  copy:
+    src: "project.service"
+    dest: "/etc/systemd/system/project.service"
+
+- name: Start Daemon
+  service: name=project state=started
+
+- name: proxy daemon config
+  copy:
+    src: "projectproxy.service"
+    dest: "/etc/systemd/system/projectproxy.service"
+
+- name: Start proxy
+  service: name=projectproxy state=started
+
+
+

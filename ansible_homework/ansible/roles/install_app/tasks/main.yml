@@ -1,0 +1,23 @@
+---
+# tasks file for install_app
+- name: Webapp directory creation
+  file:
+    path: "/var/app/"
+    state: directory
+  tags: [ app ]
+
+- name: Install application
+  git:
+    repo: "{{ repo_url }}"
+    dest: /var/app/
+    version: "{{ repo_branch }}"
+
+ 
+- name: Set ownership
+  file:
+    path: "/var/app"
+    state: directory
+    recurse: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags: [ app ]

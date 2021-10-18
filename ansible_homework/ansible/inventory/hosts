@@ -1,0 +1,13 @@
+[webservers]
+webserver ansible_host=user@172.16.182.142
+
+[all:vars]
+# HTTP Settings
+time_zone="Europe/Kiev"
+project_name="project"
+http_host="myvm.local"
+
+repo_url="https://github.com/gogolevjuri/flaskapp.git"
+repo_branch="main"
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=user

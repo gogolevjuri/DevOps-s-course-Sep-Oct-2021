@@ -1,0 +1,22 @@
+---
+- name: Install Prerequisites
+  hosts: all
+  become: yes
+  roles:
+  - update_system
+
+- name: Install Webserver
+  hosts: webservers
+  become: yes
+  roles:
+  - install_python
+  - install_app
+  - config_app
+  - config_daemon
+  - config_ssl
+
+- name: Config Firewall
+  hosts: webservers
+  become: yes
+  roles:
+  - config_firewall

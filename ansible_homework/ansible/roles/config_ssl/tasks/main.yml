@@ -1,0 +1,22 @@
+---
+# tasks file for config_ssl
+- name: SSL  directory
+  file: path=/var/app/ssl state=directory group=www-data mode=0755
+
+- name: Create private key
+  community.crypto.openssl_privatekey:
+    path: /var/app/ssl/private.pem
+
+- name: Create CSR
+  community.crypto.openssl_csr:
+    path: /var/app/ssl/cert.csr
+    privatekey_path: /var/app/ssl/private.pem
+    common_name: "{{ http_host }}"
+
+- name: Create self-signed sertificate
+  community.crypto.x509_certificate:
+    path: /var/app/ssl/cert.crt
+    privatekey_path: /var/app/ssl/private.pem
+    csr_path: /var/app/ssl/cert.csr
+    provider: selfsigned
+

@@ -1,0 +1,18 @@
+---
+# tasks file for install_python
+- name: Install python
+  apt: 
+    name:
+      - python3-pip
+      - python3-dev
+      - build-essential
+      - libssl-dev
+      - libffi-dev
+      - python-setuptools
+      - virtualenv
+      - git
+      - ufw
+      - iptables
+    update_cache: yes
+    state: latest
+

@@ -1,0 +1,7 @@
+---
+# tasks file for config_app
+- name: Install app requirements
+  pip:
+    requirements: /var/app/requirements.txt
+    virtualenv: /var/app
+    virtualenv_python: python3

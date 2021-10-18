@@ -1,0 +1,13 @@
+[Unit]
+Description=Flask-app web service
+After=network.target
+[Service]
+WorkingDirectory=/var/app
+Environment=PATH="/var/app/bin"
+Type=simple
+Restart=always
+ExecStart=/var/app/bin/python3 /var/app/animal_app.py
+[Install]
+WantedBy=multi-user.target
+
+

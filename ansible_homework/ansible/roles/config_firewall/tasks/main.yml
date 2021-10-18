@@ -1,0 +1,40 @@
+---
+# tasks file for config_firewall
+
+- name: Allow incoming connections
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  loop:
+    - 80
+    - 443
+    - 22
+
+- name: Allow loopback traffic
+  iptables:
+    chain: INPUT
+    in_interface: lo
+    jump: ACCEPT
+
+- name: Allow ESTABLISHED and RELATED connections
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+
+- name: INPUT Default policy
+  iptables:
+    chain: INPUT
+    policy: DROP
+
+- name: OUTPUT Default policy
+  iptables:
+    chain: OUTPUT
+    policy: ACCEPT
+
+- name: FORWARD Default policy
+  iptables:
+    chain: FORWARD
+    policy: DROP
